@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ONE PIECE IS REALLL — Alert Spammer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; background:#f7f9fc; margin:0; }
+    .card { background:white; padding:24px; border-radius:12px; box-shadow:0 6px 20px rgba(20,30,60,0.08); text-align:center; width:320px; }
+    button { margin:8px 6px; padding:10px 14px; border-radius:8px; border:1px solid #ddd; cursor:pointer; }
+    label { display:block; margin-top:10px; font-size:14px; color:#333; }
+    small { color:#666; display:block; margin-top:6px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>ONE PIECE IS REALLL</h2>
+    <div>
+      <button id="startBtn">Start Spam</button>
+      <button id="stopBtn" disabled>Stop Spam</button>
+    </div>
+
+    <label>
+      Interval (ms):
+      <input id="intervalInput" type="number" value="800" min="50" step="50" style="width:100px; margin-left:8px;">
+    </label>
+
+    <label style="margin-top:6px;">
+      <input id="superSpam" type="checkbox"> Super spam (very fast)
+    </label>
+
+    <small>Tip: click "Stop Spam" to stop. If your browser becomes unresponsive, close the tab/window.</small>
+  </div>
+
+  <script>
+    // Simple alert spammer with controls
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn  = document.getElementById('stopBtn');
+    const intervalInput = document.getElementById('intervalInput');
+    const superSpam = document.getElementById('superSpam');
+
+    let timerId = null;
+
+    function spamAlert() {
+      // The message the user asked for
+      alert('ONE PIECE IS REALLL');
+    }
+
+    function startSpamming() {
+      if (timerId !== null) return;
+      // If super spam checked, override interval to something aggressive (be careful!)
+      let ms = superSpam.checked ? 100 : Math.max(50, Number(intervalInput.value) || 800);
+      // Start a repeating timer that triggers alerts.
+      // Using setInterval with alert() — alerts are modal and will pause JS until dismissed,
+      // so the real rate depends on how fast alerts are dismissed.
+      timerId = setInterval(spamAlert, ms);
+      startBtn.disabled = true;
+      stopBtn.disabled  = false;
+      intervalInput.disabled = true;
+      superSpam.disabled = true;
+    }
+
+    function stopSpamming() {
+      if (timerId === null) return;
+      clearInterval(timerId);
+      timerId = null;
+      startBtn.disabled = false;
+      stopBtn.disabled  = true;
+      intervalInput.disabled = false;
+      superSpam.disabled = false;
+    }
+
+    startBtn.addEventListener('click', startSpamming);
+    stopBtn.addEventListener('click', stopSpamming);
+
+    // Stop automatically if user navigates away or closes window
+    window.addEventListener('beforeunload', stopSpamming);
+  </script>
+</body>
+</html>
